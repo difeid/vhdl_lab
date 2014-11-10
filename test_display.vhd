@@ -189,19 +189,19 @@ architecture Behavioral of test_display is
 	  "00100",
 	  "10001",
 	  "01110",
-	  "00100",
+	  "00000",
 	  "00000"
 	  );
 	  
 	 constant addres2: STD_LOGIC_VECTOR (0 to 2) :=  "001";
 	  
 	 constant symbol2: array_of_pixels_type := 
-	 ("00000",
-	  "00000",
-	  "00000",
-	  "00000",
-	  "00000",
-	  "00000",
+	 ("00100",
+	  "01010",
+	  "10001",
+	  "01010",
+	  "00100",
+	  "11111",
 	  "00000",
 	  "00000"
 	  );
