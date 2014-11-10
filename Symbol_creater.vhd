@@ -36,7 +36,7 @@ architecture Behavioral of Symbol_Creator is
     signal temp_RW_OUT   	: STD_LOGIC;
 	 signal temp_byte			: byte_type;
 	 signal temp_START_OUT	: STD_LOGIC;
-	 constant MAX_COUNTER : integer := 18729;
+	 constant MAX_COUNTER : integer := 33296;
 
 	 signal razreshenie_starta: boolean := false; 
 	 -- внутренний сигнал, контролирующий разрешение старта обработки команды
@@ -73,6 +73,7 @@ begin
 							temp_byte		<= temp_CG_RAM_ADD;
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
+							temp_CG_RAM_ADD(7) <= '1';
 						elsif counter < 2081 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
@@ -88,13 +89,15 @@ begin
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
 							
-						-- Команда "Записать данные в CG RAM
+						-- Команда "Установить адрес CG RAM" (2 строка)
 						elsif counter < 4163 then	-- 1
-							temp_RS_OUT		<= '1';
+							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
-							temp_byte		<= "---" & temp_array_pixels(2);
+							temp_byte		<= temp_CG_RAM_ADD;
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
+							temp_CG_RAM_ADD(6) <= '1';
+							temp_CG_RAM_ADD(7) <= '0';
 						elsif counter < 6243 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
@@ -103,42 +106,46 @@ begin
 						elsif counter < 6244 then	-- 1
 							temp_RS_OUT		<= '1';
 							temp_RW_OUT		<= '0';
-							temp_byte		<= "---" & temp_array_pixels(3);
+							temp_byte		<= "---" & temp_array_pixels(2);
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
 						elsif counter < 8324 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
-											
-						-- Команда "Записать данные в CG RAM
+						
+						-- Команда "Установить адрес CG RAM"  (3 строка)
 						elsif counter < 8325 then	-- 1
-							temp_RS_OUT		<= '1';
+							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
-							temp_byte		<= "---" & temp_array_pixels(4);
+							temp_byte		<= temp_CG_RAM_ADD;
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
+							temp_CG_RAM_ADD(7) <= '1';
 						elsif counter < 10405 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
-				
+							
 						-- Команда "Записать данные в CG RAM
 						elsif counter < 10406 then	-- 1
 							temp_RS_OUT		<= '1';
 							temp_RW_OUT		<= '0';
-							temp_byte		<= "---" & temp_array_pixels(5);
+							temp_byte		<= "---" & temp_array_pixels(3);
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
 						elsif counter < 12486 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
 						
-						-- Команда "Записать данные в CG RAM
+						-- Команда "Установить адрес CG RAM"  (4 строка)
 						elsif counter < 12487 then	-- 1
-							temp_RS_OUT		<= '1';
+							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
-							temp_byte		<= "---" & temp_array_pixels(6);
+							temp_byte		<= temp_CG_RAM_ADD;
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
+							temp_CG_RAM_ADD(5) <= '1';
+							temp_CG_RAM_ADD(6) <= '0';
+							temp_CG_RAM_ADD(7) <= '0';
 						elsif counter < 14567 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
@@ -147,21 +154,105 @@ begin
 						elsif counter < 14568 then	-- 1
 							temp_RS_OUT		<= '1';
 							temp_RW_OUT		<= '0';
-							temp_byte		<= "---" & temp_array_pixels(7);
+							temp_byte		<= "---" & temp_array_pixels(4);
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
 						elsif counter < 16648 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
 						
-						-- Команда "Записать данные в CG RAM
+						-- Команда "Установить адрес CG RAM"  (5 строка)
 						elsif counter < 16649 then	-- 1
+							temp_RS_OUT		<= '0';
+							temp_RW_OUT		<= '0';
+							temp_byte		<= temp_CG_RAM_ADD;
+							temp_START_OUT <= '1';
+							counter <= counter + 1;
+							temp_CG_RAM_ADD(7) <= '1';
+						elsif counter < 18729 then	-- 2080
+							temp_START_OUT <= '0';
+							counter <= counter + 1;
+						
+						-- Команда "Записать данные в CG RAM
+						elsif counter < 18730 then	-- 1
+							temp_RS_OUT		<= '1';
+							temp_RW_OUT		<= '0';
+							temp_byte		<= "---" & temp_array_pixels(5);
+							temp_START_OUT <= '1';
+							counter <= counter + 1;
+						elsif counter < 20810 then	-- 2080
+							temp_START_OUT <= '0';
+							counter <= counter + 1;
+						
+						-- Команда "Установить адрес CG RAM"  (6 строка)
+						elsif counter < 20811 then	-- 1
+							temp_RS_OUT		<= '0';
+							temp_RW_OUT		<= '0';
+							temp_byte		<= temp_CG_RAM_ADD;
+							temp_START_OUT <= '1';
+							counter <= counter + 1;
+							temp_CG_RAM_ADD(6) <= '1';
+							temp_CG_RAM_ADD(7) <= '0';
+						elsif counter < 22891 then	-- 2080
+							temp_START_OUT <= '0';
+							counter <= counter + 1;
+						
+						-- Команда "Записать данные в CG RAM
+						elsif counter < 22892 then	-- 1
+							temp_RS_OUT		<= '1';
+							temp_RW_OUT		<= '0';
+							temp_byte		<= "---" & temp_array_pixels(6);
+							temp_START_OUT <= '1';
+							counter <= counter + 1;
+						elsif counter < 24972 then	-- 2080
+							temp_START_OUT <= '0';
+							counter <= counter + 1;
+						
+						-- Команда "Установить адрес CG RAM"  (7 строка)
+						elsif counter < 24973 then	-- 1
+							temp_RS_OUT		<= '0';
+							temp_RW_OUT		<= '0';
+							temp_byte		<= temp_CG_RAM_ADD;
+							temp_START_OUT <= '1';
+							counter <= counter + 1;
+							temp_CG_RAM_ADD(7) <= '1';
+						elsif counter < 27053 then	-- 2080
+							temp_START_OUT <= '0';
+							counter <= counter + 1;
+						
+						-- Команда "Записать данные в CG RAM
+						elsif counter < 27054 then	-- 1
+							temp_RS_OUT		<= '1';
+							temp_RW_OUT		<= '0';
+							temp_byte		<= "---" & temp_array_pixels(7);
+							temp_START_OUT <= '1';
+							counter <= counter + 1;
+						elsif counter < 29134 then	-- 2080
+							temp_START_OUT <= '0';
+							counter <= counter + 1;
+							
+							-- Команда "Установить адрес CG RAM"  (8 строка)
+						elsif counter < 29135 then	-- 1
+							temp_RS_OUT		<= '0';
+							temp_RW_OUT		<= '0';
+							temp_byte		<= temp_CG_RAM_ADD;
+							temp_START_OUT <= '1';
+							counter <= counter + 1;
+							temp_CG_RAM_ADD(5) <= '0';
+							temp_CG_RAM_ADD(6) <= '0';
+							temp_CG_RAM_ADD(7) <= '0';
+						elsif counter < 31215 then	-- 2080
+							temp_START_OUT <= '0';
+							counter <= counter + 1;
+						
+						-- Команда "Записать данные в CG RAM
+						elsif counter < 31216 then	-- 1
 							temp_RS_OUT		<= '1';
 							temp_RW_OUT		<= '0';
 							temp_byte		<= "---" & temp_array_pixels(8);
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
-						elsif counter < 18729 then	-- 2080
+						elsif counter < 33296 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
 							
