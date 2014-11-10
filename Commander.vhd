@@ -35,10 +35,9 @@ entity Commander is
            DB2_IN : in  STD_LOGIC;
            DB1_IN : in  STD_LOGIC;
            DB0_IN : in  STD_LOGIC;
-			  PAUSE_AFTER_COMMAND
-						: in pause_type;
-			  START  : in  STD_LOGIC;
-			  CLK_IN : in  STD_LOGIC;
+	   PAUSE_AFTER_COMMAND : in pause_type;
+	   START  : in  STD_LOGIC;
+	   CLK_IN : in  STD_LOGIC;
 
            E_OUT   : out  STD_LOGIC;
            RS_OUT  : out  STD_LOGIC;
@@ -223,4 +222,3 @@ begin
     DB4_OUT <= temp_DB4_OUT;
 
 end Behavioral;
-
