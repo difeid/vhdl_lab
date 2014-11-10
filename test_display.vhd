@@ -69,7 +69,7 @@ architecture Behavioral of test_display is
 	 -- выходы компонента test_display (sel_to_display = 0)
 	 -- или выходы компонента Commander (sel_to_display = 1)
 
-	 signal sel_to_Commander: integer range 0 to 1 := 0;
+	 signal sel_to_Commander: integer range 0 to 2 := 0;
 	 -- сигнал-селектор, который определяет, будут ли подключены к входам компонента Commander
 	 -- выходы компонента test_display (sel_to_Commander = 0)
 	 -- или выходы компонента Pisatel (sel_to_Commander = 1)
@@ -174,6 +174,51 @@ architecture Behavioral of test_display is
 	 signal START_OUT_PISATEL: STD_LOGIC := '0'; 
 	 -- сигнал START_OUT от компонента Pisatel	 
 	 
+-- сигналы, относящиеся к компоненту Symbol_creater 
+-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 -- ВХОДНЫЕ
+	 signal addres: STD_LOGIC_VECTOR (0 to 2);
+	 signal symbol: array_of_pixels_type;
+	 
+	 signal addres1: STD_LOGIC_VECTOR (0 to 2) :=  "000";
+
+	 signal symbol1: array_of_pixels_type := 
+	 ("00000",
+	  "01010",
+	  "00100",
+	  "10001",
+	  "01110",
+	  "00000",
+	  "00000",
+	  "00000"
+	  );
+	  
+	  signal addres2: STD_LOGIC_VECTOR (0 to 2) :=  "001";
+	  
+	  signal symbol2: array_of_pixels_type := 
+	 ("00000",
+	  "01010",
+	  "00100",
+	  "00000",
+	  "01110",
+	  "10001",
+	  "00000",
+	  "00000"
+	  );
+
+	 signal START_IN_SYMBOL_CREATOR: STD_LOGIC :=	'0'; 
+	 -- сигнал START_IN к компоненту symbol_creator
+	 
+	 -- ВЫХОДНЫЕ
+	 signal command_from_symbol_creator: STD_LOGIC_VECTOR (1 to 10):="----------";  	
+
+	 signal pause_after_command_from_symbol_creator: pause_type := PAUSE2000;
+	 -- для от компонента symbol_creator
+
+	 signal START_OUT_SYMBOL_CREATOR: STD_LOGIC := '0'; 
+	 -- сигнал START_OUT от компонента symbol_creator	 
+	 
+	 
 -- Описания используемых функций и процедур
 -- ####################################################################
 	 function connector_to_LCD
@@ -208,8 +253,12 @@ architecture Behavioral of test_display is
 		signal command2: in STD_LOGIC_VECTOR (1 to 10);
 		signal pause_after_command2: in pause_type; 
 		signal START2: in STD_LOGIC;
+		
+		signal command3: in STD_LOGIC_VECTOR (1 to 10);
+		signal pause_after_command3: in pause_type; 
+		signal START3: in STD_LOGIC;
 	 
-		signal sel: in integer range 0 to 1;
+		signal sel: in integer range 0 to 2;
 	 
 		signal command: out STD_LOGIC_VECTOR (1 to 10);
 		signal pause_after_command: out pause_type; 
@@ -220,10 +269,14 @@ architecture Behavioral of test_display is
 				command <= command1;
 				pause_after_command <= pause_after_command1;
 				START <= START1;
-			else
+			elsif sel=1 then
 				command <= command2;
 				pause_after_command <= pause_after_command2;
-				START <= START2;				
+				START <= START2;
+			else
+				command <= command3;
+				pause_after_command <= pause_after_command3;
+				START <= START3;
 			end if;
 	end procedure;
 	
@@ -589,10 +642,8 @@ architecture Behavioral of test_display is
 -- а затем подаем на вход START "0" и ждем 70760 тактов.
 -- После этого компонент готов к приему следующей партии данных.
     Port ( 
-			  ARRAY1_OF_16BYTES
-			  : in array_of_16_bytes_type;
-			  ARRAY2_OF_16BYTES
-			  : in array_of_16_bytes_type;
+			  ARRAY1_OF_16BYTES : in array_of_16_bytes_type;
+			  ARRAY2_OF_16BYTES : in array_of_16_bytes_type;
 			  START_IN  : in  STD_LOGIC;
 			  CLK_IN 	: in  STD_LOGIC;
 
@@ -608,6 +659,29 @@ architecture Behavioral of test_display is
            DB0_OUT 	: out  STD_LOGIC;
 			  PAUSE_AFTER_COMMAND
 							: out  pause_type;
+		     START_OUT	: out	 STD_LOGIC
+			);
+	end component;
+	
+	 component Symbol_Creator is
+
+    Port ( 
+			  CG_RAM_ADDRESS  : in STD_LOGIC_VECTOR (0 to 2);
+			  ARRAY_OF_PIXELS : in array_of_pixels_type;
+			  START  : in  STD_LOGIC;
+			  CLK_IN : in  STD_LOGIC;
+
+			  RS_OUT  	: out  STD_LOGIC;
+           RW_OUT  	: out  STD_LOGIC;
+           DB7_OUT 	: out  STD_LOGIC;
+           DB6_OUT 	: out  STD_LOGIC;
+           DB5_OUT 	: out  STD_LOGIC;
+           DB4_OUT 	: out  STD_LOGIC;
+           DB3_OUT 	: out  STD_LOGIC;
+           DB2_OUT 	: out  STD_LOGIC;
+           DB1_OUT 	: out  STD_LOGIC;
+           DB0_OUT 	: out  STD_LOGIC;
+			  PAUSE_AFTER_COMMAND: out  pause_type;
 		     START_OUT	: out	 STD_LOGIC
 			);
 	end component;
@@ -665,6 +739,28 @@ begin
 			  PAUSE_AFTER_COMMAND 
 							=> pause_after_command_from_pisatel,
 		     START_OUT	=> START_OUT_PISATEL
+			);
+			
+	 metka3: Symbol_Creator
+    Port map( 
+			  CG_RAM_ADDRESS => addres,
+			  ARRAY_OF_PIXELS => symbol,
+			  START 	=> START_IN_SYMBOL_CREATOR,
+			  CLK_IN 	=> CLK50MHZ,
+
+           RS_OUT  	=> command_from_symbol_creator(1),
+           RW_OUT  	=> command_from_symbol_creator(2),
+           DB7_OUT 	=> command_from_symbol_creator(3),
+           DB6_OUT 	=> command_from_symbol_creator(4),
+           DB5_OUT 	=> command_from_symbol_creator(5),
+           DB4_OUT 	=> command_from_symbol_creator(6),
+           DB3_OUT 	=> command_from_symbol_creator(7),
+           DB2_OUT 	=> command_from_symbol_creator(8),
+           DB1_OUT 	=> command_from_symbol_creator(9),
+           DB0_OUT 	=> command_from_symbol_creator(10),
+			  PAUSE_AFTER_COMMAND 
+							=> pause_after_command_from_symbol_creator,
+		     START_OUT	=> START_OUT_SYMBOL_CREATOR
 			);
 
 
@@ -753,17 +849,44 @@ begin
 				elsif counter < 1052372 then	-- 82080
 					START_OUT_TEST_DISPLAY <= '0';
 					counter <= counter + 1;
+					
+			-- Создание символа 1 с помощью компонента Symbol_Creator
+		  --###############################################################
+				elsif counter < 1052373 then  -- 1
+					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
+					sel_to_Commander <= 2;	-- Настройка компонента Commander на прием данных от компонента Symbol_Creator
+					addres <= addres1;
+					symbol <= symbol1;
+					START_IN_SYMBOL_CREATOR <= '1';
+					counter <= counter + 1;
+				elsif counter < 1085669 then	-- 33296
+					START_IN_SYMBOL_CREATOR <= '0';
+					counter <= counter + 1;
+			
+			-- Создание символа 2 с помощью компонента Symbol_Creator
+		  --###############################################################
+				elsif counter < 1085670 then  -- 1
+					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
+					sel_to_Commander <= 2;	-- Настройка компонента Commander на прием данных от компонента Symbol_Creator
+					addres <= addres2;
+					symbol <= symbol2;
+					START_IN_SYMBOL_CREATOR <= '1';
+					counter <= counter + 1;
+				elsif counter < 1118966 then	-- 33296
+					START_IN_SYMBOL_CREATOR <= '0';
+					counter <= counter + 1;	
+			
 
 				-- Вывод символов 2-ух строк на дисплей с помощью компонента Pisatel
 		  --###############################################################
-				elsif counter < 1052373 then  -- 1
+				elsif counter < 1118967 then  -- 1
 					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
 					sel_to_Commander <= 1;	-- Настройка компонента Commander на прием данных от компонента Pisatel
 					-- входные сигналы stroka1 и stroka2 уже инициализированы и заполнены значениями в начале секции Architecture
 					-- присваивать им значения сейчас нет нужды
 					START_IN_PISATEL <= '1';
 					counter <= counter + 1;
-				elsif counter < 1123133 then	-- 70760
+				elsif counter < 1189727 then	-- 70760
 					START_IN_PISATEL <= '0';
 					counter <= counter + 1;
 					
@@ -787,6 +910,11 @@ begin
 		command_from_pisatel,
 		pause_after_command_from_pisatel, 
 		START_OUT_PISATEL,
+		
+		-- от компонента Symbol_Creator
+		command_from_symbol_creator,
+		pause_after_command_from_symbol_creator, 
+		START_OUT_SYMBOL_CREATOR,
 	 
 		sel_to_Commander,
 		
