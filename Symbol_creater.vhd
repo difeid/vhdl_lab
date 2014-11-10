@@ -73,7 +73,7 @@ begin
 							temp_byte		<= temp_CG_RAM_ADD;
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
-							--temp_CG_RAM_ADD(7) <= '1';
+							temp_CG_RAM_ADD(7) <= '1';
 						elsif counter < 2081 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
