@@ -858,32 +858,32 @@ begin
 					sel_to_Commander <= 2;	-- Настройка компонента Commander на прием данных от компонента Symbol_Creator
 					START_IN_SYMBOL_CREATOR <= '1';
 					counter <= counter + 1;
-				elsif counter < 1085673 then	-- 33300
+				elsif counter < 1071108 then	-- 18735
 					START_IN_SYMBOL_CREATOR <= '0';
 					counter <= counter + 1;
 			
 			-- Создание символа 2 с помощью компонента Symbol_Creator
 		  --###############################################################
-				elsif counter < 1085674 then  -- 1
+				elsif counter < 1071109 then  -- 1
 					addres <= addres2;
 					symbol <= symbol2;
 					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
 					sel_to_Commander <= 2;	-- Настройка компонента Commander на прием данных от компонента Symbol_Creator
 					START_IN_SYMBOL_CREATOR <= '1';
 					counter <= counter + 1;
-				elsif counter < 1118974 then	-- 33300
+				elsif counter < 1089844 then	-- 18735
 					START_IN_SYMBOL_CREATOR <= '0';
 					counter <= counter + 1;	
 			
 
 				-- Вывод символов 2-ух строк на дисплей с помощью компонента Pisatel
 		  --###############################################################
-				elsif counter < 1118975 then  -- 1
+				elsif counter < 1089845 then  -- 1
 					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
 					sel_to_Commander <= 1;	-- Настройка компонента Commander на прием данных от компонента Pisatel
 					START_IN_PISATEL <= '1';
 					counter <= counter + 1;
-				elsif counter < 1189735 then	-- 70760
+				elsif counter < 1160605 then	-- 70760
 					START_IN_PISATEL <= '0';
 					counter <= counter + 1;
 					
