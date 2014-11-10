@@ -66,14 +66,14 @@ begin
 					-- Выполнение компонентом своей задачи
 					elsif razreshenie_starta = true then
 	
-						-- Команда "Установить адрес CG RAM"
+						-- Команда "Установить адрес CG RAM" (1 строка)
 						if counter < 1 then	-- 1
 							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
 							temp_byte		<= temp_CG_RAM_ADD;
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
-							temp_CG_RAM_ADD(7) <= '1';
+							--temp_CG_RAM_ADD(7) <= '1';
 						elsif counter < 2081 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
@@ -89,8 +89,8 @@ begin
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
 							
-						-- Команда "Установить адрес CG RAM"
-							elsif counter < 4163 then	-- 1
+						-- Команда "Установить адрес CG RAM" (2 строка)
+						elsif counter < 4163 then	-- 1
 							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
 							temp_byte		<= temp_CG_RAM_ADD;
@@ -113,7 +113,7 @@ begin
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
 						
-						-- Команда "Установить адрес CG RAM"
+						-- Команда "Установить адрес CG RAM"  (3 строка)
 						elsif counter < 8325 then	-- 1
 							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
@@ -136,7 +136,7 @@ begin
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
 						
-						-- Команда "Установить адрес CG RAM"
+						-- Команда "Установить адрес CG RAM"  (4 строка)
 						elsif counter < 12487 then	-- 1
 							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
@@ -160,9 +160,8 @@ begin
 						elsif counter < 16648 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
-							razreshenie_starta <= false;
 						
-						-- Команда "Установить адрес CG RAM"
+						-- Команда "Установить адрес CG RAM"  (5 строка)
 						elsif counter < 16649 then	-- 1
 							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
@@ -184,9 +183,8 @@ begin
 						elsif counter < 20810 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
-							razreshenie_starta <= false;
 						
-						-- Команда "Установить адрес CG RAM"
+						-- Команда "Установить адрес CG RAM"  (6 строка)
 						elsif counter < 20811 then	-- 1
 							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
@@ -209,9 +207,8 @@ begin
 						elsif counter < 24972 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
-							razreshenie_starta <= false;
 						
-						-- Команда "Установить адрес CG RAM"
+						-- Команда "Установить адрес CG RAM"  (7 строка)
 						elsif counter < 24973 then	-- 1
 							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
@@ -233,15 +230,17 @@ begin
 						elsif counter < 29134 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
-							razreshenie_starta <= false;
 							
-							-- Команда "Установить адрес CG RAM"
+							-- Команда "Установить адрес CG RAM"  (8 строка)
 						elsif counter < 29135 then	-- 1
 							temp_RS_OUT		<= '0';
 							temp_RW_OUT		<= '0';
 							temp_byte		<= temp_CG_RAM_ADD;
 							temp_START_OUT <= '1';
 							counter <= counter + 1;
+							temp_CG_RAM_ADD(5) <= '0';
+							temp_CG_RAM_ADD(6) <= '0';
+							temp_CG_RAM_ADD(7) <= '0';
 						elsif counter < 31215 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
@@ -256,7 +255,6 @@ begin
 						elsif counter < 33296 then	-- 2080
 							temp_START_OUT <= '0';
 							counter <= counter + 1;
-							razreshenie_starta <= false;
 							
 						else
 							-- Временным выходным сигналам присваиваем значения
@@ -288,4 +286,3 @@ begin
 	 START_OUT	<= temp_START_OUT;
 
 end Behavioral;
-
