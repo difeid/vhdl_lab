@@ -180,28 +180,28 @@ architecture Behavioral of test_display is
 	 signal addres: STD_LOGIC_VECTOR (0 to 2);
 	 signal symbol: array_of_pixels_type;
 	 
-	 signal addres1: STD_LOGIC_VECTOR (0 to 2) :=  "000";
+	 constant addres1: STD_LOGIC_VECTOR (0 to 2) :=  "000";
 
-	 signal symbol1: array_of_pixels_type := 
+	 constant symbol1: array_of_pixels_type := 
 	 ("00000",
 	  "01010",
 	  "00100",
+	  "00100",
 	  "10001",
 	  "01110",
-	  "00000",
-	  "00000",
+	  "00100",
 	  "00000"
 	  );
 	  
-	  signal addres2: STD_LOGIC_VECTOR (0 to 2) :=  "001";
+	 constant addres2: STD_LOGIC_VECTOR (0 to 2) :=  "001";
 	  
-	  signal symbol2: array_of_pixels_type := 
+	 constant symbol2: array_of_pixels_type := 
 	 ("00000",
-	  "01010",
-	  "00100",
 	  "00000",
-	  "01110",
-	  "10001",
+	  "00000",
+	  "00000",
+	  "00000",
+	  "00000",
 	  "00000",
 	  "00000"
 	  );
@@ -758,8 +758,7 @@ begin
            DB2_OUT 	=> command_from_symbol_creator(8),
            DB1_OUT 	=> command_from_symbol_creator(9),
            DB0_OUT 	=> command_from_symbol_creator(10),
-			  PAUSE_AFTER_COMMAND 
-							=> pause_after_command_from_symbol_creator,
+			  PAUSE_AFTER_COMMAND => pause_after_command_from_symbol_creator,
 		     START_OUT	=> START_OUT_SYMBOL_CREATOR
 			);
 
@@ -853,40 +852,38 @@ begin
 			-- Создание символа 1 с помощью компонента Symbol_Creator
 		  --###############################################################
 				elsif counter < 1052373 then  -- 1
-					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
-					sel_to_Commander <= 2;	-- Настройка компонента Commander на прием данных от компонента Symbol_Creator
 					addres <= addres1;
 					symbol <= symbol1;
+					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
+					sel_to_Commander <= 2;	-- Настройка компонента Commander на прием данных от компонента Symbol_Creator
 					START_IN_SYMBOL_CREATOR <= '1';
 					counter <= counter + 1;
-				elsif counter < 1085669 then	-- 33296
+				elsif counter < 1085673 then	-- 33300
 					START_IN_SYMBOL_CREATOR <= '0';
 					counter <= counter + 1;
 			
 			-- Создание символа 2 с помощью компонента Symbol_Creator
 		  --###############################################################
-				elsif counter < 1085670 then  -- 1
-					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
-					sel_to_Commander <= 2;	-- Настройка компонента Commander на прием данных от компонента Symbol_Creator
+				elsif counter < 1085674 then  -- 1
 					addres <= addres2;
 					symbol <= symbol2;
+					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
+					sel_to_Commander <= 2;	-- Настройка компонента Commander на прием данных от компонента Symbol_Creator
 					START_IN_SYMBOL_CREATOR <= '1';
 					counter <= counter + 1;
-				elsif counter < 1118966 then	-- 33296
+				elsif counter < 1118974 then	-- 33300
 					START_IN_SYMBOL_CREATOR <= '0';
 					counter <= counter + 1;	
 			
 
 				-- Вывод символов 2-ух строк на дисплей с помощью компонента Pisatel
 		  --###############################################################
-				elsif counter < 1118967 then  -- 1
+				elsif counter < 1118975 then  -- 1
 					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
 					sel_to_Commander <= 1;	-- Настройка компонента Commander на прием данных от компонента Pisatel
-					-- входные сигналы stroka1 и stroka2 уже инициализированы и заполнены значениями в начале секции Architecture
-					-- присваивать им значения сейчас нет нужды
 					START_IN_PISATEL <= '1';
 					counter <= counter + 1;
-				elsif counter < 1189727 then	-- 70760
+				elsif counter < 1189735 then	-- 70760
 					START_IN_PISATEL <= '0';
 					counter <= counter + 1;
 					
@@ -939,4 +936,3 @@ begin
     LCD_DB0 <= '1';
 
 end Behavioral;
-
