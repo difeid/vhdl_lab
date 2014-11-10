@@ -520,8 +520,7 @@ begin
     DB2_OUT 	<= temp_byte(2);
     DB1_OUT 	<= temp_byte(1);
     DB0_OUT 	<= temp_byte(0);
-	 PAUSE_AFTER_COMMAND
-					<= PAUSE2000;
+	 PAUSE_AFTER_COMMAND <= PAUSE2000;
 	 START_OUT	<= temp_START_OUT;
 
 
