@@ -664,7 +664,7 @@ begin
 
 
 	 -- Подача выходных сигналов компонентов на входы LCD дисплея
-	 LCD_E 	<= connector_to_LCD(to_display_from_test_display(1) , from_commander(1) , sel_to_LCD);
+    LCD_E 	<= connector_to_LCD(to_display_from_test_display(1) , from_commander(1) , sel_to_LCD);
     LCD_RS 	<= connector_to_LCD(to_display_from_test_display(2) , from_commander(2) , sel_to_LCD);
     LCD_RW 	<= connector_to_LCD(to_display_from_test_display(3) , from_commander(3) , sel_to_LCD);
     LCD_DB7 <= connector_to_LCD(to_display_from_test_display(4) , from_commander(4) , sel_to_LCD);	 
