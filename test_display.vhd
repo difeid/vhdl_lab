@@ -225,7 +225,7 @@ architecture Behavioral of test_display is
 	 -- сигналы, относящиеся к компоненту Former
 -- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	signal SEQUENCE_IN_FORMER : STD_LOGIC_VECTOR (1 to 16) := "1010101010101010";
-	signal D_IN_FORMER : STD_LOGIC_VECTOR (1 to 10):= "1010-----";
+	signal D_IN_FORMER : STD_LOGIC_VECTOR (1 to 10):= "1010------";
 	signal FREQ_IN_FORMER :  STD_LOGIC_VECTOR (15 downto 0) := "000000010000010";
 		
 	signal ARRAY_STRING1_OUT_FORMER : array_of_16_bytes_type;
