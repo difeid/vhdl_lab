@@ -1,4 +1,4 @@
-Enter file contents herelibrary IEEE;
+library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 USE ieee.numeric_std.ALL;
 use lcd_package.ALL;
@@ -53,9 +53,6 @@ architecture Behavioral of Former is
 	 "00100000",
 	 "00100000",
 	 "00100000");
-	 
-	 signal TEMP_FREQ : integer range 0 to 256;
-	 signal STRING_FREQ : STRING (1 to 3);
 	 
 	 function char_to_byte
 	 -- Функция преобразует входной символ в код этого символа в соответствии с таблицей 
@@ -140,11 +137,13 @@ begin
 	TEMP_STRING2(11) <=  "00000001" WHEN CLK = '1' ELSE
 								"00000000";
 								
-	TEMP_FREQ <= TO_INTEGER(unsigned(FREQ));
-	STRING_FREQ <= integer'image(TEMP_FREQ);
 	
-	process (MANUAL_MODE, PAUSE, STRING_FREQ)
+	process (MANUAL_MODE, PAUSE, FREQ)
+		variable TEMP_FREQ : integer range 0 to 256;
+		variable STRING_FREQ : STRING (1 to 3);
 		begin
+		TEMP_FREQ := TO_INTEGER(unsigned(FREQ));
+		STRING_FREQ := integer'image(TEMP_FREQ);
 		
 		if PAUSE = '1' then
 			TEMP_STRING2(12) <= char_to_byte('P');
@@ -161,7 +160,7 @@ begin
 				TEMP_STRING2(16) <= "00000011"; -- Символ кнопки
 			else
 				TEMP_STRING2(12) <= char_to_byte(STRING_FREQ(1));
-				if STRING_FREQ(2) = ' ' then 
+				if STRING_FREQ(2) /= '0' and  STRING_FREQ(2) /= '1' then 
 					TEMP_STRING2(13) <= char_to_byte('0');
 				else
 					TEMP_STRING2(13) <= char_to_byte(STRING_FREQ(2));
