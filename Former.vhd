@@ -54,6 +54,8 @@ architecture Behavioral of Former is
 	 "00100000",
 	 "00100000");
 	 
+	 signal TEMP_FREQ : integer range 0 to 256;
+	 
 	 function char_to_byte
 	 -- Функция преобразует входной символ в код этого символа в соответствии с таблицей 
 	 -- символов CG ROM и возвращает полученное значение. Если такого символа нет в таблице,
@@ -136,13 +138,14 @@ begin
 	-- Запись 10ого символа второй строки
 	TEMP_STRING2(11) <=  "00000001" WHEN CLK = '1' ELSE
 								"00000000";
+	TEMP_FREQ <= TO_INTEGER(unsigned(FREQ));
 								
 	
-	process (MANUAL_MODE, PAUSE, FREQ)
-		variable TEMP_FREQ : integer range 0 to 256;
+	process (MANUAL_MODE, PAUSE, TEMP_FREQ)
+		
 		variable STRING_FREQ : STRING (1 to 3);
 		begin
-		TEMP_FREQ := TO_INTEGER(unsigned(FREQ));
+		
 		STRING_FREQ := integer'image(TEMP_FREQ);
 		
 		if PAUSE = '1' then
