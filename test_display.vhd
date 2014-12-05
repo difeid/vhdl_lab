@@ -26,7 +26,8 @@ entity test_display is
            LCD_DB0 	: out  STD_LOGIC;
 			  
 			  SW0 : in STD_LOGIC;
-			  SW1 : in STD_LOGIC
+			  SW1 : in STD_LOGIC;
+			  BTN : in STD_LOGIC
 			  
 			);
 end test_display;
@@ -226,7 +227,8 @@ architecture Behavioral of test_display is
 -- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	signal SEQUENCE_IN_FORMER : STD_LOGIC_VECTOR (1 to 16) := "1010101010101010";
 	signal D_IN_FORMER : STD_LOGIC_VECTOR (1 to 10):= "1010------";
-	signal FREQ_IN_FORMER :  STD_LOGIC_VECTOR (15 downto 0) := "0000000010000010";
+	signal FREQ_IN_FORMER :  STD_LOGIC_VECTOR (7 downto 0) := "00000101";
+	signal CLK_BTN : STD_LOGIC := '0';
 		
 	signal ARRAY_STRING1_OUT_FORMER : array_of_16_bytes_type;
 	signal ARRAY_STRING2_OUT_FORMER : array_of_16_bytes_type;
@@ -400,7 +402,7 @@ architecture Behavioral of test_display is
    Port (
 		SEQUENCE : in STD_LOGIC_VECTOR (1 to 16);
 		D : in STD_LOGIC_VECTOR (1 to 10);
-		FREQ : in STD_LOGIC_VECTOR (15 downto 0);
+		FREQ : in STD_LOGIC_VECTOR (7 downto 0);
 		MANUAL_MODE : in STD_LOGIC;
 		PAUSE : in STD_LOGIC;
 		CLK : in STD_LOGIC;
@@ -494,7 +496,7 @@ begin
 		FREQ => FREQ_IN_FORMER, 
 		MANUAL_MODE => SW0,
 		PAUSE => SW1,
-		CLK => CLK50MHZ,
+		CLK => CLK_BTN,
 		
 		ARRAY_STRING1 => ARRAY_STRING1_OUT_FORMER,
 		ARRAY_STRING2 => ARRAY_STRING2_OUT_FORMER
@@ -631,7 +633,17 @@ begin
 				else
 					to_display_from_test_display <= "001----";
 					sel_to_LCD <= 0;
-				-- Ожидание...
+					
+					if BTN = '1' and CLK_BTN = '0' then
+						SEQUENCE_IN_FORMER <= SEQUENCE_IN_FORMER(2 to 16) & '0' ;
+						D_IN_FORMER <= D_IN_FORMER(2 to 10) & '-';
+						CLK_BTN <= '1';
+					elsif BTN = '0' and CLK_BTN = '1' then
+						FREQ_IN_FORMER <= FREQ_IN_FORMER(6 downto 0) & '0';
+						CLK_BTN <= '0';
+					end if;
+						
+				
             end if;
         end if;
     end process; 
@@ -664,7 +676,7 @@ begin
 
 
 	 -- Подача выходных сигналов компонентов на входы LCD дисплея
-    LCD_E 	<= connector_to_LCD(to_display_from_test_display(1) , from_commander(1) , sel_to_LCD);
+	 LCD_E 	<= connector_to_LCD(to_display_from_test_display(1) , from_commander(1) , sel_to_LCD);
     LCD_RS 	<= connector_to_LCD(to_display_from_test_display(2) , from_commander(2) , sel_to_LCD);
     LCD_RW 	<= connector_to_LCD(to_display_from_test_display(3) , from_commander(3) , sel_to_LCD);
     LCD_DB7 <= connector_to_LCD(to_display_from_test_display(4) , from_commander(4) , sel_to_LCD);	 
