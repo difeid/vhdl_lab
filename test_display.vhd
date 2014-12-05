@@ -23,7 +23,12 @@ entity test_display is
            LCD_DB3 	: out  STD_LOGIC;
            LCD_DB2 	: out  STD_LOGIC;
            LCD_DB1 	: out  STD_LOGIC;
-           LCD_DB0 	: out  STD_LOGIC
+           LCD_DB0 	: out  STD_LOGIC;
+			  
+			  SW0 : in STD_LOGIC;
+			  SW1 : in STD_LOGIC;
+			  BTN : in STD_LOGIC
+			  
 			);
 end test_display;
 
@@ -180,29 +185,29 @@ architecture Behavioral of test_display is
 	 signal addres: STD_LOGIC_VECTOR (0 to 2);
 	 signal symbol: array_of_pixels_type;
 	 
-	 constant addres1: STD_LOGIC_VECTOR (0 to 2) :=  "000";
+	 signal addres1: STD_LOGIC_VECTOR (0 to 2) :=  "000";
 
-	 constant symbol1: array_of_pixels_type := 
+	 signal symbol1: array_of_pixels_type := 
 	 ("00000",
-	  "01010",
-	  "00100",
-	  "00100",
-	  "10001",
-	  "01110",
 	  "00000",
+	  "01110",
+	  "01010",
+	  "01010",
+	  "01010",
+	  "11011",
 	  "00000"
 	  );
 	  
-	 constant addres2: STD_LOGIC_VECTOR (0 to 2) :=  "001";
+	  signal addres2: STD_LOGIC_VECTOR (0 to 2) :=  "001";
 	  
-	 constant symbol2: array_of_pixels_type := 
-	 ("00100",
-	  "01010",
-	  "10001",
-	  "01010",
-	  "00100",
-	  "11111",
+	  signal symbol2: array_of_pixels_type := 
+	 ("00000",
 	  "00000",
+	  "00000",
+	  "00000",
+	  "00000",
+	  "00000",
+	  "11111",
 	  "00000"
 	  );
 
@@ -218,7 +223,17 @@ architecture Behavioral of test_display is
 	 signal START_OUT_SYMBOL_CREATOR: STD_LOGIC := '0'; 
 	 -- сигнал START_OUT от компонента symbol_creator	 
 	 
-	 
+	 -- сигналы, относящиеся к компоненту Former
+-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	signal SEQUENCE_IN_FORMER : STD_LOGIC_VECTOR (1 to 16) := "1010101010101010";
+	signal D_IN_FORMER : STD_LOGIC_VECTOR (1 to 10):= "1010------";
+	signal FREQ_IN_FORMER :  STD_LOGIC_VECTOR (7 downto 0) := "00000101";
+	signal CLK_BTN : STD_LOGIC := '0';
+		
+	signal ARRAY_STRING1_OUT_FORMER : array_of_16_bytes_type;
+	signal ARRAY_STRING2_OUT_FORMER : array_of_16_bytes_type;
+
+	
 -- Описания используемых функций и процедур
 -- ####################################################################
 	 function connector_to_LCD
@@ -280,311 +295,7 @@ architecture Behavioral of test_display is
 			end if;
 	end procedure;
 	
-	 function char_to_byte
-	 -- Функция преобразует входной символ в код этого символа в соответствии с таблицей 
-	 -- символов CG ROM и возвращает полученное значение. Если такого символа нет в таблице,
-	 -- то возвращает значение пробела
-	 (
-		ch: CHARACTER
-	 )
-	 return byte_type is
-	 begin
-			if 	ch = ' ' then
-				return "00100000";
 
-			elsif ch = '!' then
-				return "00100001";
-
-			elsif ch = '"' then
-				return "00100010";
-
-			elsif ch = '#' then
-				return "00100011";
-
-			elsif ch = '$' then
-				return "00100100";
-
-			elsif ch = '%' then
-				return "00100101";
-
-			elsif ch = '&' then
-				return "00100110";
-
-			elsif ch = ''' then
-				return "00100111";
-
-			elsif ch = '(' then
-				return "00101000";
-
-			elsif ch = ')' then
-				return "00101001";
-
-			elsif ch = '*' then
-				return "00101010";
-
-			elsif ch = '+' then
-				return "00101011";
-
-			elsif ch = ',' then
-				return "00101100";
-
-			elsif ch = '-' then
-				return "00101101";
-
-			elsif ch = '.' then
-				return "00101110";
-
-			elsif ch = '/' then
-				return "00101111";
-
-			elsif ch = '0' then
-				return "00110000";
-
-			elsif ch = '1' then
-				return "00110001";
-
-			elsif ch = '2' then
-				return "00110010";
-
-			elsif ch = '3' then
-				return "00110011";
-
-			elsif ch = '4' then
-				return "00110100";
-
-			elsif ch = '5' then
-				return "00110101";
-
-			elsif ch = '6' then
-				return "00110110";
-
-			elsif ch = '7' then
-				return "00110111";
-
-			elsif ch = '8' then
-				return "00111000";
-
-			elsif ch = '9' then
-				return "00111001";
-
-			elsif ch = ':' then
-				return "00111010";
-
-			elsif ch = ';' then
-				return "00111011";
-
-			elsif ch = '<' then
-				return "00111100";
-
-			elsif ch = '=' then
-				return "00111101";
-
-			elsif ch = '>' then
-				return "00111110";
-
-			elsif ch = '?' then
-				return "00111111";
-
-			elsif ch = '@' then
-				return "01000000";
-
-			elsif ch = 'A' then
-				return "01000001";
-
-			elsif ch = 'B' then
-				return "01000010";
-
-			elsif ch = 'C' then
-				return "01000011";
-
-			elsif ch = 'D' then
-				return "01000100";
-
-			elsif ch = 'E' then
-				return "01000101";
-
-			elsif ch = 'F' then
-				return "01000110";
-
-			elsif ch = 'G' then
-				return "01000111";
-
-			elsif ch = 'H' then
-				return "01001000";
-
-			elsif ch = 'I' then
-				return "01001001";
-
-			elsif ch = 'J' then
-				return "01001010";
-
-			elsif ch = 'K' then
-				return "01001011";
-
-			elsif ch = 'L' then
-				return "01001100";
-
-			elsif ch = 'M' then
-				return "01001101";
-
-			elsif ch = 'N' then
-				return "01001110";
-
-			elsif ch = 'O' then
-				return "01001111";
-
-			elsif ch = 'P' then
-				return "01010000";
-
-			elsif ch = 'Q' then
-				return "01010001";
-
-			elsif ch = 'R' then
-				return "01010010";
-
-			elsif ch = 'S' then
-				return "01010011";
-
-			elsif ch = 'T' then
-				return "01010100";
-
-			elsif ch = 'U' then
-				return "01010101";
-
-			elsif ch = 'V' then
-				return "01010110";
-
-			elsif ch = 'W' then
-				return "01010111";
-
-			elsif ch = 'X' then
-				return "01011000";
-
-			elsif ch = 'Y' then
-				return "01011001";
-
-			elsif ch = 'Z' then
-				return "01011010";
-
-			elsif ch = '[' then
-				return "01011011";
-
-			elsif ch = '?' then
-				return "01011100";
-
-			elsif ch = ']' then
-				return "01011101";
-
-			elsif ch = '^' then
-				return "01011110";
-
-			elsif ch = '_' then
-				return "01011111";
-
-			elsif ch = '`' then
-				return "01100000";
-
-			elsif ch = 'a' then
-				return "01100001";
-
-			elsif ch = 'b' then
-				return "01100010";
-
-			elsif ch = 'c' then
-				return "01100011";
-
-			elsif ch = 'd' then
-				return "01100100";
-
-			elsif ch = 'e' then
-				return "01100101";
-
-			elsif ch = 'f' then
-				return "01100110";
-
-			elsif ch = 'g' then
-				return "01100111";
-
-			elsif ch = 'h' then
-				return "01101000";
-
-			elsif ch = 'i' then
-				return "01101001";
-
-			elsif ch = 'j' then
-				return "01101010";
-
-			elsif ch = 'k' then
-				return "01101011";
-
-			elsif ch = 'l' then
-				return "01101100";
-
-			elsif ch = 'm' then
-				return "01101101";
-
-			elsif ch = 'n' then
-				return "01101110";
-
-			elsif ch = 'o' then
-				return "01101111";
-
-			elsif ch = 'p' then
-				return "01110000";
-
-			elsif ch = 'q' then
-				return "01110001";
-
-			elsif ch = 'r' then
-				return "01110010";
-
-			elsif ch = 's' then
-				return "01110011";
-
-			elsif ch = 't' then
-				return "01110100";
-
-			elsif ch = 'u' then
-				return "01110101";
-
-			elsif ch = 'v' then
-				return "01110110";
-
-			elsif ch = 'w' then
-				return "01110111";
-
-			elsif ch = 'x' then
-				return "01111000";
-
-			elsif ch = 'y' then
-				return "01111001";
-
-			elsif ch = 'z' then
-				return "01111010";
-
-			elsif ch = '{' then
-				return "01111011";
-
-			elsif ch = '|' then
-				return "01111100";
-
-			elsif ch = '}' then
-				return "01111101";
-
-			elsif ch = '>' then
-				return "01111110";
-
-			elsif ch = '<' then
-				return "01111111";
-
-			elsif ch = '-' then
-				return "11111111";
-
-			else
-				return "00100000";
-			end if;
-	 end char_to_byte;
-	 
 -- Описания используемых компонентов
 -- ####################################################################
 	 component Commander is
@@ -686,6 +397,21 @@ architecture Behavioral of test_display is
 			);
 	end component;
 	
+	component Former is
+
+   Port (
+		SEQUENCE : in STD_LOGIC_VECTOR (1 to 16);
+		D : in STD_LOGIC_VECTOR (1 to 10);
+		FREQ : in STD_LOGIC_VECTOR (7 downto 0);
+		MANUAL_MODE : in STD_LOGIC;
+		PAUSE : in STD_LOGIC;
+		CLK : in STD_LOGIC;
+		
+		ARRAY_STRING1 : out array_of_16_bytes_type;
+		ARRAY_STRING2 : out array_of_16_bytes_type
+     );
+	end component;
+	
 begin
 	 -- Вызов конкретного экземпляра компонента Commander
 	 metka1: Commander
@@ -758,10 +484,23 @@ begin
            DB2_OUT 	=> command_from_symbol_creator(8),
            DB1_OUT 	=> command_from_symbol_creator(9),
            DB0_OUT 	=> command_from_symbol_creator(10),
-			  PAUSE_AFTER_COMMAND => pause_after_command_from_symbol_creator,
+			  PAUSE_AFTER_COMMAND 
+							=> pause_after_command_from_symbol_creator,
 		     START_OUT	=> START_OUT_SYMBOL_CREATOR
 			);
-
+			
+	metka4: Former
+	Port map( 
+		SEQUENCE => SEQUENCE_IN_FORMER,
+		D => D_IN_FORMER,
+		FREQ => FREQ_IN_FORMER, 
+		MANUAL_MODE => SW0,
+		PAUSE => SW1,
+		CLK => CLK_BTN,
+		
+		ARRAY_STRING1 => ARRAY_STRING1_OUT_FORMER,
+		ARRAY_STRING2 => ARRAY_STRING2_OUT_FORMER
+			);
 
     process (CLK50MHZ) begin
 		  if rising_edge(CLK50MHZ) then  -- проверка положительного фронта
@@ -852,45 +591,59 @@ begin
 			-- Создание символа 1 с помощью компонента Symbol_Creator
 		  --###############################################################
 				elsif counter < 1052373 then  -- 1
-					addres <= addres1;
-					symbol <= symbol1;
 					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
 					sel_to_Commander <= 2;	-- Настройка компонента Commander на прием данных от компонента Symbol_Creator
+					addres <= addres1;
+					symbol <= symbol1;
 					START_IN_SYMBOL_CREATOR <= '1';
 					counter <= counter + 1;
-				elsif counter < 1071108 then	-- 18735
+				elsif counter < 1085669 then	-- 33296
 					START_IN_SYMBOL_CREATOR <= '0';
 					counter <= counter + 1;
 			
 			-- Создание символа 2 с помощью компонента Symbol_Creator
 		  --###############################################################
-				elsif counter < 1071109 then  -- 1
-					addres <= addres2;
-					symbol <= symbol2;
+				elsif counter < 1085670 then  -- 1
 					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
 					sel_to_Commander <= 2;	-- Настройка компонента Commander на прием данных от компонента Symbol_Creator
+					addres <= addres2;
+					symbol <= symbol2;
 					START_IN_SYMBOL_CREATOR <= '1';
 					counter <= counter + 1;
-				elsif counter < 1089844 then	-- 18735
+				elsif counter < 1118966 then	-- 33296
 					START_IN_SYMBOL_CREATOR <= '0';
 					counter <= counter + 1;	
 			
 
 				-- Вывод символов 2-ух строк на дисплей с помощью компонента Pisatel
 		  --###############################################################
-				elsif counter < 1089845 then  -- 1
+				elsif counter < 1118967 then  -- 1
+					stroka1 <= ARRAY_STRING1_OUT_FORMER;
+					stroka2 <= ARRAY_STRING2_OUT_FORMER;
 					sel_to_LCD <= 1;			-- Выбор подачи сигналов на дисплей от компонента Commander
 					sel_to_Commander <= 1;	-- Настройка компонента Commander на прием данных от компонента Pisatel
+					-- входные сигналы stroka1 и stroka2 уже инициализированы и заполнены значениями в начале секции Architecture
+					-- присваивать им значения сейчас нет нужды
 					START_IN_PISATEL <= '1';
 					counter <= counter + 1;
-				elsif counter < 1160605 then	-- 70760
+				elsif counter < 1189727 then	-- 70760
 					START_IN_PISATEL <= '0';
 					counter <= counter + 1;
 					
 				else
 					to_display_from_test_display <= "001----";
 					sel_to_LCD <= 0;
-				-- Ожидание...
+					
+					if BTN = '1' and CLK_BTN = '0' then
+						SEQUENCE_IN_FORMER <= SEQUENCE_IN_FORMER(2 to 16) & '0' ;
+						D_IN_FORMER <= D_IN_FORMER(2 to 10) & '-';
+						CLK_BTN <= '1';
+					elsif BTN = '0' and CLK_BTN = '1' then
+						FREQ_IN_FORMER <= FREQ_IN_FORMER(6 downto 0) & '0';
+						CLK_BTN <= '0';
+					end if;
+						
+				
             end if;
         end if;
     end process; 
@@ -936,3 +689,4 @@ begin
     LCD_DB0 <= '1';
 
 end Behavioral;
+
