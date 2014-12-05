@@ -79,7 +79,7 @@ architecture Behavioral of test_display is
 	 -- выходы компонента test_display (sel_to_Commander = 0)
 	 -- или выходы компонента Pisatel (sel_to_Commander = 1)
 
-    signal counter : integer range 0 to 100000000 := 0; -- счетчик тактов
+    signal counter : integer range 0 to 1189728 := 0; -- счетчик тактов
 	 -- счетчик тактов
 
 -- сигналы, относящиеся к компоненту Commander 
@@ -226,7 +226,7 @@ architecture Behavioral of test_display is
 	 -- сигналы, относящиеся к компоненту Former
 -- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	signal SEQUENCE_IN_FORMER : STD_LOGIC_VECTOR (1 to 16) := "1010101010101010";
-	signal D_IN_FORMER : STD_LOGIC_VECTOR (1 to 10):= "1010------";
+	signal D_IN_FORMER : STD_LOGIC_VECTOR (1 to 10):= "1010101010";
 	signal FREQ_IN_FORMER :  STD_LOGIC_VECTOR (7 downto 0) := "00000101";
 	signal CLK_BTN : STD_LOGIC := '0';
 		
@@ -636,12 +636,13 @@ begin
 					
 					if BTN = '1' and CLK_BTN = '0' then
 						SEQUENCE_IN_FORMER <= SEQUENCE_IN_FORMER(2 to 16) & '0' ;
-						D_IN_FORMER <= D_IN_FORMER(2 to 10) & '-';
+						D_IN_FORMER <= D_IN_FORMER(2 to 10) & '0';
 						CLK_BTN <= '1';
 					elsif BTN = '0' and CLK_BTN = '1' then
 						FREQ_IN_FORMER <= FREQ_IN_FORMER(6 downto 0) & '0';
 						CLK_BTN <= '0';
 					end if;
+					counter <= counter + 1;
 						
 				
             end if;
@@ -689,4 +690,3 @@ begin
     LCD_DB0 <= '1';
 
 end Behavioral;
-
